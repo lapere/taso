@@ -61,8 +61,6 @@ class FontEditor(Frame):
 
         self.canvas.bind("<Button-1>", self.rubber_start)
         self.canvas.bind("<Button-3>", self.rubber_stop)
-        
-            
 
         self.letters = pickle.load(open('save.p'))
         self.do_letter_menus(self.letters)
@@ -91,14 +89,12 @@ class FontEditor(Frame):
                     y = (13.5 - point[1])
                     arg.append(x)
                     arg.append(y)
-            
                 tag = self.canvas.create_line(arg, width="1m", capstyle="round", tags="l")
             else:
                 tag = self.canvas.create_line(line, width="1m", capstyle="round", tags="l")
             self.canvas.tag_bind(tag, "<Enter>", self.enterl)
             self.canvas.tag_bind(tag, "<Leave>", self.leavel)
             self.canvas.scale(tag, 0, 0, 30, 30)
-                
                 
     def delall(self):
         self.canvas.delete("l")

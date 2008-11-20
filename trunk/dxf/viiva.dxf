@@ -21,29 +21,37 @@ $DIMGAP
  40
 0.625
   9
-$DIMEXO
- 40
-0.625
-  9
 $INSUNITS
  70
 4
+  9
+$DIMEXO
+ 40
+0.625
   9
 $DIMTXT
  40
 2.5
   9
-$PLIMMAX
- 10
-210.0
- 20
-297.0
+$GRIDMODE
+ 70
+1
+  9
+$DIMSTYLE
+  2
+Standard
   9
 $PLIMMIN
  10
 0.0
  20
 0.0
+  9
+$PLIMMAX
+ 10
+210.0
+ 20
+297.0
   9
 $DIMEXE
  40
@@ -1133,7 +1141,7 @@ AcDbSymbolTableRecord
 100
 AcDbBlockTableRecord
   2
-laatikko
+z
 340
 0
   0
@@ -1145,7 +1153,19 @@ AcDbSymbolTableRecord
 100
 AcDbBlockTableRecord
   2
-viiva
+z2
+340
+0
+  0
+BLOCK_RECORD
+  5
+45
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+z3
 340
 0
   0
@@ -1265,7 +1285,7 @@ AcDbBlockEnd
   0
 BLOCK
   5
-45
+46
 100
 AcDbEntity
   8
@@ -1273,7 +1293,7 @@ AcDbEntity
 100
 AcDbBlockBegin
   2
-laatikko
+z
  70
 0
  10
@@ -1283,37 +1303,9 @@ laatikko
  30
 0.0
   3
-laatikko
+z
   1
 
-  0
-LINE
-  5
-46
-100
-AcDbEntity
-100
-AcDbLine
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
- 10
--200.0
- 20
--200.0
- 30
-0.0
- 11
--100.0
- 21
--200.0
- 31
-0.0
   0
 LINE
   5
@@ -1331,15 +1323,15 @@ AcDbLine
   6
 ByLayer
  10
--100.0
+-50.0
  20
--200.0
+-50.0
  30
 0.0
  11
--100.0
+-50.0
  21
--100.0
+0.0
  31
 0.0
   0
@@ -1359,15 +1351,15 @@ AcDbLine
   6
 ByLayer
  10
--100.0
+-50.0
  20
--100.0
+0.0
  30
 0.0
  11
--200.0
+50.0
  21
--100.0
+0.0
  31
 0.0
   0
@@ -1387,15 +1379,15 @@ AcDbLine
   6
 ByLayer
  10
--200.0
+50.0
  20
--100.0
+0.0
  30
 0.0
  11
--200.0
+50.0
  21
--200.0
+50.0
  31
 0.0
   0
@@ -1419,7 +1411,7 @@ AcDbEntity
 100
 AcDbBlockBegin
   2
-viiva
+z2
  70
 0
  10
@@ -1429,57 +1421,13 @@ viiva
  30
 0.0
   3
-viiva
+z2
   1
 
   0
-LINE
-  5
-4C
-100
-AcDbEntity
-100
-AcDbLine
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
- 10
--100.0
- 20
-0.0
- 30
-0.0
- 11
-0.0
- 21
-100.0
- 31
-0.0
-  0
-ENDBLK
-  5
-4D
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockEnd
-  0
-ENDSEC
-  0
-SECTION
-  2
-ENTITIES
-  0
 INSERT
   5
-4E
+4C
 100
 AcDbEntity
 100
@@ -1493,17 +1441,53 @@ AcDbBlockReference
   6
 ByLayer
   2
-viiva
+z
  10
-100.0
+50.0
  20
-100.0
+50.0
  30
 0.0
+ 50
+10.0
  44
 1.0
  45
 1.0
+  0
+ENDBLK
+  5
+4D
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+4E
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockBegin
+  2
+z3
+ 70
+0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+z3
+  1
+
   0
 INSERT
   5
@@ -1521,49 +1505,35 @@ AcDbBlockReference
   6
 ByLayer
   2
-viiva
+z2
  10
-200.0
+-250.0
  20
-100.0
+-150.0
  30
 0.0
  50
-45.0
+10.0
  44
 1.0
  45
 1.0
   0
-INSERT
+ENDBLK
   5
 50
 100
 AcDbEntity
-100
-AcDbBlockReference
   8
 0
- 62
-256
-370
--1
-  6
-ByLayer
+100
+AcDbBlockEnd
+  0
+ENDSEC
+  0
+SECTION
   2
-viiva
- 10
-300.0
- 20
-100.0
- 30
-0.0
- 50
-90.0
- 44
-1.0
- 45
-1.0
+ENTITIES
   0
 INSERT
   5
@@ -1581,15 +1551,15 @@ AcDbBlockReference
   6
 ByLayer
   2
-viiva
+z3
  10
-400.0
+330.0
  20
-100.0
+200.0
  30
 0.0
  50
-135.0
+20.0
  44
 1.0
  45

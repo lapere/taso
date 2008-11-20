@@ -1,31 +1,33 @@
+# -*- coding: utf-8 -*-
 # http://www.autodesk.com/techpubs/autocad/acadr14/dxf/
 from Tkinter import *
 from math import *
+from helpers import *
 import tkFont
 import copy
 
 class DFACE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		DFACE.cnt += 1
 class DSOLID:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		DSOLID.cnt += 1
 		
 class ACAD_PROXY_ENTITY:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		ACAD_PROXY_ENTITY.cnt += 1
 			
 class ARC:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 
-            x = e.data["10"] * scale + x_off 
-            y = e.data["20"] * scale + y_off
+            x = e.data["10"]
+            y = e.data["20"]
             
-            r = e.data["40"] * scale
+            r = e.data["40"]
             start = e.data["50"]
             end = e.data["51"]
             
@@ -38,34 +40,31 @@ class ARC:
             box_y0 = canvas.h - y - r
             box_x1 = x + r
             box_y1 = canvas.h - y + r
-            
             self.tag = canvas.c.create_arc(box_x0, box_y0, box_x1, box_y1, 
                                     extent=angle, start=start, 
                                     style="arc")
 	    ARC.cnt += 1
 class ATTDEF:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		ATTDEF.cnt += 1
 		
 class ATTRIB:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		ATTRIB.cnt += 1
 class BODY:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		BODY.cnt += 1
 		
 class CIRCLE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 
-	    x = e.data["10"] * scale + x_off 
-            y = e.data["20"] * scale + y_off
-            
-            r = e.data["40"] * scale 
-            
+	    x = e.data["10"]
+            y = e.data["20"]
+            r = e.data["40"]
 
             box_x0 = x - r
             box_y0 = canvas.h - y - r
@@ -76,82 +75,56 @@ class CIRCLE:
 	    CIRCLE.cnt += 1       
 class DIMENSION:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 	    DIMENSION.cnt += 1
 class ELLIPSE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		ELLIPSE.cnt += 1
 class HATCH:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		HATCH.cnt += 1
 class IMAGE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		IMAGE.cnt += 1
 class INSERT:
     cnt = 0
-    def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+    def __init__(self, canvas, e, master=None):
         self.e = e
         self.b_name = e.data["2"]
         block = canvas.blocks[self.b_name]
 
-       
+        self.x_off = e.data["10"]
+        self.y_off = e.data["20"]
 
-        if e.data.has_key("10"):
-            x_off = e.data["10"] * scale
-        else:
-            x_off = 0
-            
-        if e.data.has_key("20"):
-            y_off = e.data["20"] * scale
-        else:
-            y_off = 0
-
-        
         if e.data.has_key('41'):
-            scale = e.data['41'] * scale
+            x_scale = e.data['41']
 
-        if not scale:
-            scale = canvas.scale
+        if e.data.has_key('42'):
+            y_scale = e.data['42']
 
-        INSERT.cnt += 1
-        
-        for entity in block.entities:
-            entity = copy.deepcopy(entity) #make a deep copy because there is no ref and otherwise our f(funit) not work
+        if e.data.has_key("50"):
+            self.rot = e.data["50"]
+
+        if master:
+            self.x_off = self.x_off + master.x_off
+            self.y_off = self.y_off + master.y_off
+                
+            
+        for entity in block.entities:            
             f = funit[entity.type]
-            if (entity.type != "INSERT") or True:
-            #rotate if needed    
-                if e.data.has_key("50"):
-                    alfa = radians(float(e.data["50"]))
-                
-                    for pnt in 10,11,12:
-                        x_pnt = str(pnt)
-                        y_pnt = str(pnt+10)
-                        if entity.data.has_key(x_pnt):
-                            if type(entity.data[x_pnt]) != list:
-                                x = entity.data[x_pnt]
-                                y = entity.data[y_pnt]
-                                entity.data[x_pnt] = x * cos(alfa) - y * sin(alfa)
-                                entity.data[y_pnt] = x * sin(alfa) + y * cos(alfa)
-                                
-                            else:
-                                #TODO ei toimi kierto 
-                                pass
-                    if entity.type == "ARC":
-                        for a in "50","51":
-                                entity.data[a] = entity.data[a] + degrees(alfa)
-                
-                i = f(canvas, entity, scale = scale, x_off = x_off, y_off = y_off)
-                #if entity.type == "LINE":
-                #    canvas.c.tag_bind(i.tag, "<Button-1>", self.mouse_push)
+            if entity.type == "INSERT":
+                i = f(canvas, entity, self)
             else:
                 i = f(canvas, entity)
-                
+                if i.tag:
+                    canvas.c.move(i.tag, self.x_off, -self.y_off)
+                    #canvas.c.move(i.tag, self.x_off, -self.y_off) 
                        
-            self.tag = self.b_name
-	    INSERT.cnt += 1
+        self.tag = None
+	INSERT.cnt += 1
             
     def mouse_push(self, event):
         print "INSERT", self.tag,
@@ -160,17 +133,17 @@ class INSERT:
 
 class LEADER:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		LEADER.cnt += 1
 class LINE:
     cnt = 0
-    def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+    def __init__(self, canvas, e):
         self.e = e
         
-        x0 = e.data["10"] * scale + x_off
-        y0 = e.data["20"] * scale + y_off
-        x1 = e.data["11"] * scale + x_off
-        y1 = e.data["21"] * scale + y_off
+        x0 = e.data["10"]
+        y0 = e.data["20"]
+        x1 = e.data["11"]
+        y1 = e.data["21"]
 
         
         y0 = canvas.h - y0
@@ -189,14 +162,14 @@ class LINE:
 	
 class LWPOLYLINE:
     cnt = 0
-    def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+    def __init__(self, canvas, e):
         self.e = e
 
         arg = []
         
         for x,y in zip(e.data["10"], e.data["20"]):
-            arg.append(x * scale + x_off)
-            y = y * scale + y_off
+            arg.append(x * scale + iparam["x_off"])
+            y = y * scale + iparam["y_off"]
             arg.append(canvas.h - y)
             
 
@@ -212,56 +185,56 @@ class LWPOLYLINE:
 
 class MLINE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
             MLINE.cnt += 1
 class MTEXT:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		MTEXT.cnt += 1
 class OLEFRAME:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		OLEFRAME.cnt += 1
 class OLE2FRAME:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		OLE2FRAME.cnt += 1
 		
 class POINT:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		POINT.cnt += 1
 class POLYLINE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		POLYLINE.cnt += 1
 class RAY:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		RAY.cnt += 1
 class REGION:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		REGION.cnt += 1
 class SEQEND:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		SEQEND.cnt += 1
 class SHAPE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		SHAPE.cnt += 1
 class SOLID:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		SOLID.cnt += 1
 class SPLINE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		SPLINE.cnt += 1
 class TEXT:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 
             # core fields
             h = int(e.data["40"] * scale)
@@ -316,23 +289,23 @@ class TEXT:
 	    TEXT.cnt += 1
 class TOLERANCE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		TOLERANCE.cnt += 1
 class TRACE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		TRACE.cnt += 1
 class VERTEX:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		VERTEX.cnt += 1
 class VIEWPORT:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		VIEWPORT.cnt += 1
 class XLINE:
 	cnt = 0
-	def __init__(self, canvas, e, scale = 1, x_off = 0, y_off = 0):
+	def __init__(self, canvas, e):
 		XLINE.cnt += 1
    
 funit = dict({"3DFACE":DFACE,

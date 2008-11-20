@@ -1,4 +1,5 @@
 #svn test
+import sys
 import group_code
 from Tkinter import *
 import tkFileDialog
@@ -79,7 +80,7 @@ def read_dxf_file(name, data):
 
 
 data = []
-read_dxf_file("kaari.dxf", data)
+read_dxf_file(sys.argv[1], data)
 
 data = iter(data)
 
@@ -260,14 +261,41 @@ if he.variables.has_key("$EXTMAX"):
 else:
     canvas.scale = 1
 
-canvas.scale = 0.1
+canvas.scale = 1
 root.geometry("%dx%d" % (h, w))
 
 canvas.c = Canvas(root, bg="white")
 canvas.c.pack(fill=BOTH, expand=1)
 
-
+xcnt = 0
+print "ENTITIES"
+for e in en.entities:
+    print e.type
+    print "\tx=", e.data["10"]
+    print "\thandle=", e.data["5"]
+    xcnt += 1
+print "BLOCKS"
 canvas.blocks = bl.blocks
+for b in canvas.blocks:
+    print canvas.blocks[b].data["3"]
+    for e in canvas.blocks[b].entities:
+        print "\t", e.type
+        print "\tx=", e.data["10"]
+        print "\thandle=", e.data["5"]
+        if e.type == "INSERT":
+            b_name = e.data["2"]
+            print "\t\t", b_name
+            block = canvas.blocks[b_name]
+            for e2 in block.entities:
+                print "\t\t\t", e2.type
+                print "\t\t\tx=", e.data["10"]
+                print "\t\t\thandle=", e.data["5"]
+                xcnt += 1
+        else:
+            xcnt += 1
+            
+print "total=", xcnt
+
 
 cnt = 0
 
@@ -279,7 +307,7 @@ cnt = 0
 
 for e in en.entities:
     f = funit[e.type]
-    f(canvas, e, canvas.scale)
+    f(canvas, e)
 """
 for e in  bl.blocks['HP26012'].entities:
     print e.type
