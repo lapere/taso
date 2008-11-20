@@ -50,7 +50,7 @@ class Test:
         
         
     def load_user_tools(self):
-        "lataa default tools"
+        "lataa user tools"
         fp, pathname, description = imp.find_module("user_tools")
 
         try:
