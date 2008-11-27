@@ -271,8 +271,6 @@ xcnt = 0
 print "ENTITIES"
 for e in en.entities:
     print e.type
-    print "\tx=", e.data["10"]
-    print "\thandle=", e.data["5"]
     xcnt += 1
 print "BLOCKS"
 canvas.blocks = bl.blocks
@@ -280,16 +278,12 @@ for b in canvas.blocks:
     print canvas.blocks[b].data["3"]
     for e in canvas.blocks[b].entities:
         print "\t", e.type
-        print "\tx=", e.data["10"]
-        print "\thandle=", e.data["5"]
         if e.type == "INSERT":
             b_name = e.data["2"]
             print "\t\t", b_name
             block = canvas.blocks[b_name]
             for e2 in block.entities:
                 print "\t\t\t", e2.type
-                print "\t\t\tx=", e.data["10"]
-                print "\t\t\thandle=", e.data["5"]
                 xcnt += 1
         else:
             xcnt += 1
