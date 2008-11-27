@@ -5,7 +5,7 @@ from math import *
 from helpers import *
 import tkFont
 import copy
-from font_SFS_ISO_3098 import Arc
+from font_SFS-ISO_3098 import Arc
 
 class DFACE:
 	cnt = 0
