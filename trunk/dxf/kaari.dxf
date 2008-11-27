@@ -21,21 +21,17 @@ $DIMGAP
  40
 0.625
   9
-$INSUNITS
- 70
-4
-  9
 $DIMEXO
  40
 0.625
   9
+$INSUNITS
+ 70
+4
+  9
 $DIMTXT
  40
 2.5
-  9
-$DIMSTYLE
-  2
-Standard
   9
 $PLIMMAX
  10
@@ -920,6 +916,8 @@ AcDbLayerTableRecord
 7
   6
 CONTINUOUS
+370
+0
 390
 F
   0
@@ -1127,30 +1125,6 @@ AcDbBlockTableRecord
 340
 26
   0
-BLOCK_RECORD
-  5
-43
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-kurvi
-340
-0
-  0
-BLOCK_RECORD
-  5
-44
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-kurvit
-340
-0
-  0
 ENDTAB
   0
 ENDSEC
@@ -1265,321 +1239,17 @@ AcDbEntity
 100
 AcDbBlockEnd
   0
-BLOCK
-  5
-45
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockBegin
-  2
-kurvi
- 70
-0
- 10
-0.0
- 20
-0.0
- 30
-0.0
-  3
-kurvi
-  1
-
-  0
-ARC
-  5
-46
-100
-AcDbEntity
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
-100
-AcDbCircle
- 10
--80.4707496863238418
- 20
--17.5960562336033277
- 30
-0.0
- 40
-46.4941977449809372
-100
-AcDbArc
- 50
-323.3110009780740484
- 51
-91.8078072586109499
-  0
-ARC
-  5
-47
-100
-AcDbEntity
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
-100
-AcDbCircle
- 10
--42.3856096245424965
- 20
--45.9724711924005334
- 30
-0.0
- 40
-1.0
-100
-AcDbArc
- 50
-143.3110009780737357
- 51
-260.6881349489115109
-  0
-ENDBLK
-  5
-48
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockEnd
-  0
-BLOCK
-  5
-49
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockBegin
-  2
-kurvit
- 70
-0
- 10
-0.0
- 20
-0.0
- 30
-0.0
-  3
-kurvit
-  1
-
-  0
-INSERT
-  5
-4A
-100
-AcDbEntity
-100
-AcDbBlockReference
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
-  2
-kurvi
- 10
-111.5081747317819492
- 20
-131.2362889751998978
- 30
-0.0
-  0
-INSERT
-  5
-4B
-100
-AcDbEntity
-100
-AcDbBlockReference
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
-  2
-kurvi
- 10
-180.5706747317819918
- 20
-139.0487889751998978
- 30
-0.0
- 50
-10.0
- 44
-1.0
- 45
-1.0
-  0
-INSERT
-  5
-4C
-100
-AcDbEntity
-100
-AcDbBlockReference
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
-  2
-kurvi
- 10
-254.9456747317820771
- 20
-149.6737889751999262
- 30
-0.0
- 50
-20.0
- 44
-1.0
- 45
-1.0
-  0
-INSERT
-  5
-4D
-100
-AcDbEntity
-100
-AcDbBlockReference
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
-  2
-kurvi
- 10
-104.008174731781935
- 20
-90.2987889751998694
- 30
-0.0
- 50
-29.9999999999999964
- 44
-1.0
- 45
-1.0
-  0
-INSERT
-  5
-4E
-100
-AcDbEntity
-100
-AcDbBlockReference
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
-  2
-kurvi
- 10
-178.3831747317819918
- 20
-96.8612889751998836
- 30
-0.0
- 50
-40.0
- 44
-1.0
- 45
-1.0
-  0
-INSERT
-  5
-4F
-100
-AcDbEntity
-100
-AcDbBlockReference
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
-  2
-kurvi
- 10
-253.3831747317820771
- 20
-99.3612889751998836
- 30
-0.0
- 50
-50.0
- 44
-1.0
- 45
-1.0
-  0
-ENDBLK
-  5
-50
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockEnd
-  0
 ENDSEC
   0
 SECTION
   2
 ENTITIES
   0
-INSERT
+ARC
   5
-51
+43
 100
 AcDbEntity
-100
-AcDbBlockReference
   8
 0
  62
@@ -1588,20 +1258,22 @@ AcDbBlockReference
 -1
   6
 ByLayer
-  2
-kurvit
+100
+AcDbCircle
  10
-283.9622103640799082
+100.0
  20
-3.640541158513845
+0.0
  30
 0.0
+ 40
+100.0
+100
+AcDbArc
  50
 90.0
- 44
-1.0
- 45
-1.0
+ 51
+180.0
   0
 ENDSEC
   0
@@ -1641,7 +1313,7 @@ E
   3
 AcDbVariableDictionary
 350
-52
+44
   0
 DICTIONARY
   5
@@ -2105,7 +1777,7 @@ Layout2
   0
 DICTIONARY
   5
-52
+44
 100
 AcDbDictionary
 281
@@ -2113,15 +1785,15 @@ AcDbDictionary
   3
 DIMASSOC
 350
-54
+46
   3
 HIDETEXT
 350
-53
+45
   0
 DICTIONARYVAR
   5
-53
+45
 100
 DictionaryVariables
 280
@@ -2131,7 +1803,7 @@ DictionaryVariables
   0
 DICTIONARYVAR
   5
-54
+46
 100
 DictionaryVariables
 280

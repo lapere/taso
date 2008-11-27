@@ -21,37 +21,29 @@ $DIMGAP
  40
 0.625
   9
-$INSUNITS
- 70
-4
-  9
 $DIMEXO
  40
 0.625
   9
+$INSUNITS
+ 70
+4
+  9
 $DIMTXT
  40
 2.5
-  9
-$GRIDMODE
- 70
-1
-  9
-$DIMSTYLE
-  2
-Standard
-  9
-$PLIMMIN
- 10
-0.0
- 20
-0.0
   9
 $PLIMMAX
  10
 210.0
  20
 297.0
+  9
+$PLIMMIN
+ 10
+0.0
+ 20
+0.0
   9
 $DIMEXE
  40
@@ -1141,31 +1133,7 @@ AcDbSymbolTableRecord
 100
 AcDbBlockTableRecord
   2
-z
-340
-0
-  0
-BLOCK_RECORD
-  5
-44
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-z2
-340
-0
-  0
-BLOCK_RECORD
-  5
-45
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-z3
+v
 340
 0
   0
@@ -1285,7 +1253,7 @@ AcDbBlockEnd
   0
 BLOCK
   5
-46
+44
 100
 AcDbEntity
   8
@@ -1293,7 +1261,7 @@ AcDbEntity
 100
 AcDbBlockBegin
   2
-z
+v
  70
 0
  10
@@ -1303,9 +1271,65 @@ z
  30
 0.0
   3
-z
+v
   1
 
+  0
+LINE
+  5
+45
+100
+AcDbEntity
+100
+AcDbLine
+  8
+0
+ 62
+256
+370
+-1
+  6
+ByLayer
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 11
+0.0
+ 21
+100.0
+ 31
+0.0
+  0
+LINE
+  5
+46
+100
+AcDbEntity
+100
+AcDbLine
+  8
+0
+ 62
+256
+370
+-1
+  6
+ByLayer
+ 10
+0.0
+ 20
+100.0
+ 30
+0.0
+ 11
+20.0
+ 21
+80.0
+ 31
+0.0
   0
 LINE
   5
@@ -1323,77 +1347,21 @@ AcDbLine
   6
 ByLayer
  10
--50.0
+20.0
  20
--50.0
+80.0
  30
 0.0
  11
--50.0
+0.0
  21
-0.0
- 31
-0.0
-  0
-LINE
-  5
-48
-100
-AcDbEntity
-100
-AcDbLine
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
- 10
--50.0
- 20
-0.0
- 30
-0.0
- 11
-50.0
- 21
-0.0
- 31
-0.0
-  0
-LINE
-  5
-49
-100
-AcDbEntity
-100
-AcDbLine
-  8
-0
- 62
-256
-370
--1
-  6
-ByLayer
- 10
-50.0
- 20
-0.0
- 30
-0.0
- 11
-50.0
- 21
-50.0
+60.0
  31
 0.0
   0
 ENDBLK
   5
-4A
+48
 100
 AcDbEntity
   8
@@ -1401,29 +1369,101 @@ AcDbEntity
 100
 AcDbBlockEnd
   0
-BLOCK
+ENDSEC
+  0
+SECTION
+  2
+ENTITIES
+  0
+INSERT
   5
-4B
+49
 100
 AcDbEntity
+100
+AcDbBlockReference
   8
 0
-100
-AcDbBlockBegin
+ 62
+256
+370
+-1
+  6
+ByLayer
   2
-z2
- 70
-0
+v
  10
 0.0
  20
 0.0
  30
 0.0
-  3
-z2
-  1
-
+ 50
+45.0
+ 44
+1.0
+ 45
+1.0
+  0
+INSERT
+  5
+4A
+100
+AcDbEntity
+100
+AcDbBlockReference
+  8
+0
+ 62
+256
+370
+-1
+  6
+ByLayer
+  2
+v
+ 10
+100.0
+ 20
+-100.0
+ 30
+0.0
+ 50
+20.0
+ 44
+1.0
+ 45
+1.0
+  0
+INSERT
+  5
+4B
+100
+AcDbEntity
+100
+AcDbBlockReference
+  8
+0
+ 62
+256
+370
+-1
+  6
+ByLayer
+  2
+v
+ 10
+200.0
+ 20
+-100.0
+ 30
+0.0
+ 50
+40.0
+ 44
+1.0
+ 45
+1.0
   0
 INSERT
   5
@@ -1441,53 +1481,79 @@ AcDbBlockReference
   6
 ByLayer
   2
-z
+v
  10
-50.0
+300.0
  20
-50.0
+-100.0
  30
 0.0
  50
-10.0
+50.0
  44
 1.0
  45
 1.0
   0
-ENDBLK
+INSERT
   5
 4D
 100
 AcDbEntity
+100
+AcDbBlockReference
   8
 0
-100
-AcDbBlockEnd
+ 62
+256
+370
+-1
+  6
+ByLayer
+  2
+v
+ 10
+100.0
+ 20
+-200.0
+ 30
+0.0
+ 50
+59.9999999999999929
+ 44
+1.0
+ 45
+1.0
   0
-BLOCK
+INSERT
   5
 4E
 100
 AcDbEntity
+100
+AcDbBlockReference
   8
 0
-100
-AcDbBlockBegin
+ 62
+256
+370
+-1
+  6
+ByLayer
   2
-z3
- 70
-0
+v
  10
-0.0
+200.0
  20
-0.0
+-200.0
  30
 0.0
-  3
-z3
-  1
-
+ 50
+70.0
+ 44
+1.0
+ 45
+1.0
   0
 INSERT
   5
@@ -1505,35 +1571,49 @@ AcDbBlockReference
   6
 ByLayer
   2
-z2
+v
  10
--250.0
+300.0
  20
--150.0
+-200.0
  30
 0.0
  50
-10.0
+80.0
  44
 1.0
  45
 1.0
   0
-ENDBLK
+INSERT
   5
 50
 100
 AcDbEntity
+100
+AcDbBlockReference
   8
 0
-100
-AcDbBlockEnd
-  0
-ENDSEC
-  0
-SECTION
+ 62
+256
+370
+-1
+  6
+ByLayer
   2
-ENTITIES
+v
+ 10
+100.0
+ 20
+-300.0
+ 30
+0.0
+ 50
+90.0
+ 44
+1.0
+ 45
+1.0
   0
 INSERT
   5
@@ -1551,15 +1631,45 @@ AcDbBlockReference
   6
 ByLayer
   2
-z3
+v
  10
-330.0
- 20
 200.0
+ 20
+-300.0
  30
 0.0
  50
-20.0
+100.0
+ 44
+1.0
+ 45
+1.0
+  0
+INSERT
+  5
+52
+100
+AcDbEntity
+100
+AcDbBlockReference
+  8
+0
+ 62
+256
+370
+-1
+  6
+ByLayer
+  2
+v
+ 10
+300.0
+ 20
+-300.0
+ 30
+0.0
+ 50
+110.0
  44
 1.0
  45
@@ -1603,7 +1713,7 @@ E
   3
 AcDbVariableDictionary
 350
-52
+53
   0
 DICTIONARY
   5
@@ -2067,7 +2177,7 @@ Layout2
   0
 DICTIONARY
   5
-52
+53
 100
 AcDbDictionary
 281
@@ -2075,15 +2185,15 @@ AcDbDictionary
   3
 DIMASSOC
 350
-54
+55
   3
 HIDETEXT
 350
-53
+54
   0
 DICTIONARYVAR
   5
-53
+54
 100
 DictionaryVariables
 280
@@ -2093,7 +2203,7 @@ DictionaryVariables
   0
 DICTIONARYVAR
   5
-54
+55
 100
 DictionaryVariables
 280

@@ -144,7 +144,13 @@ def cp_3p(startp, midp, endp):
 	return direction, center
 	
      
-def _arc(self, startp=None, midp=None, endp=None, center=None, direction=None, radius=None, angle=None, length=None, clockw=True):
+def _arc(self, startp=None, midp=None, endp=None, center=None, direction=None, radius=None, angle=None, length=None, astart=None, clockw=True):
+
+        if startp == None:
+                if astart and radius and center:
+                        x = center[0] + radius * cos(radians(astart)) 
+                        y = center[1] + radius * sin(radians(astart))
+                        startp = (x,y)
 
 	if center == None:
 		if direction != None:
@@ -155,13 +161,13 @@ def _arc(self, startp=None, midp=None, endp=None, center=None, direction=None, r
 			clockw, center = cp_startendradius(startp, endp, radius)
 		elif midp != None:
 			clockw, center = cp_3p(startp, midp, endp)
-		
-      
+			
 	if radius == None:
 		radius = DistBetweenTwoPoint(center[0], center[1], startp[0], startp[1])
-	
-	astart = AngleBetweenTwoPoint(center[0], center[1], startp[0], startp[1])
 
+	if astart == None:
+		astart = AngleBetweenTwoPoint(center[0], center[1], startp[0], startp[1])
+                
  	if angle == None:
 		if length != None:
             		angle = asin(length/(2*radius))*2
@@ -178,9 +184,10 @@ def _arc(self, startp=None, midp=None, endp=None, center=None, direction=None, r
                         astart = aend
                         angle = 360 - angle
         else:
-                angle = (angle / pi) * 180.0
+                pass
+                #angle = (angle / pi) * 180.0
 
-        
+        print center, startp, angle
         line = kaari(center, startp, angle)
         arg = []
         #tag = str(self)
@@ -190,7 +197,7 @@ def _arc(self, startp=None, midp=None, endp=None, center=None, direction=None, r
                 arg.append(x)
                 arg.append(y)
                     
-        tag = self.create_line(arg, width="1m", capstyle="round")
+        tag = self.create_line(arg, capstyle="round")
 
         return tag
 
