@@ -5,7 +5,7 @@ from math import *
 from helpers import *
 import tkFont
 import copy
-from font_SFS-ISO_3098 import Arc
+from font_SFS_ISO_3098 import Arc
 
 class DFACE:
 	cnt = 0
@@ -107,6 +107,7 @@ class INSERT:
 
         self.x_off = e.data["10"]
         self.y_off = e.data["20"]
+        self.id = canvas.c.create_line(self.x_off-1, self.y_off, self.x_off+1, self.y_off, tags=self.tag)
 
         if e.data.has_key('41'):
             x_scale = e.data['41']
@@ -125,11 +126,14 @@ class INSERT:
         #    self.rot = self.rot + master.rot
                 
         for entity in block.entities:
-            print canvas.c.find_withtag(self.tag)
+            #_tag = canvas.c.find_withtag(self.tag)
+            #_tag = canvas.c.gettags(_tag)
             f = funit[entity.type]
             i = f(canvas, entity, self)
-            if i.tag:
-                canvas.c.addtag_withtag(self.tag, i.tag)
+            #if i.tag and not _tag:
+            canvas.c.addtag_withtag(i.tag, self.tag)
+            #else:
+            #    canvas.c.addtag_withtag(self.tag, _tag[0])
 
         #rotate(canvas.c, self.tag, self.rot)
         canvas.c.move(self.tag, self.x_off, self.y_off)
