@@ -268,6 +268,8 @@ canvas.c = Canvas(root, bg="white")
 canvas.c.pack(fill=BOTH, expand=1)
 
 xcnt = 0
+canvas.blocks = bl.blocks
+
 print "ENTITIES"
 for e in en.entities:
     print e.type
@@ -289,7 +291,6 @@ for b in canvas.blocks:
             xcnt += 1
             
 print "total=", xcnt
-
 
 cnt = 0
 

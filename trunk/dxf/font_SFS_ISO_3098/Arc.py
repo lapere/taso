@@ -187,7 +187,7 @@ def _arc(self, startp=None, midp=None, endp=None, center=None, direction=None, r
                 pass
                 #angle = (angle / pi) * 180.0
 
-        print center, startp, angle
+        #print center, startp, angle
         line = kaari(center, startp, angle)
         arg = []
         #tag = str(self)
@@ -195,15 +195,15 @@ def _arc(self, startp=None, midp=None, endp=None, center=None, direction=None, r
                 x = round(point[0], 2)
                 y = round(point[1], 2) 
                 arg.append(x)
-                arg.append(y)
+                arg.append(-y)
                     
-        tag = self.create_line(arg, capstyle="round")
+        tag = self.c.create_line(arg, capstyle="round")
 
         return tag
-
         
                           
 if __name__ == '__main__':
+
     root = Tk()
     c = Canvas(root)
     

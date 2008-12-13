@@ -40,12 +40,14 @@ class ARC:
             start_x = x + cos(radians(angle)) * r
             start_y = y + sin(radians(angle)) * r
             
-            self.tag = Arc._arc(canvas.c, center=(x, y),
+            self.tag = Arc._arc(canvas, center=(x, y),
                                           radius=r,
                                           astart = start,
                                           angle = angle)
-            
+            if not master:
+                    canvas.c.move(self.tag, 0, canvas.h)           
 	    ARC.cnt += 1
+
 class ATTDEF:
 	cnt = 0
 	def __init__(self, canvas, e, master=None):
@@ -102,12 +104,13 @@ class INSERT:
     def __init__(self, canvas, e, master=None):
         self.e = e
         self.b_name = e.data["2"]
-        self.tag = self.b_name
+        self.tag = "insert" + str(INSERT.cnt) #self.b_name
         block = canvas.blocks[self.b_name]
 
         self.x_off = e.data["10"]
         self.y_off = e.data["20"]
-        self.id = canvas.c.create_line(self.x_off-1, self.y_off, self.x_off+1, self.y_off, tags=self.tag)
+
+        #self.tag = canvas.c.create_line(self.x_off-1, self.y_off, self.x_off+1, self.y_off)
 
         if e.data.has_key('41'):
             x_scale = e.data['41']
@@ -119,31 +122,24 @@ class INSERT:
             self.rot = e.data["50"]
         else:
             self.rot = 0
-
-        #if master:
-        #    self.x_off = self.x_off + master.x_off
-        #    self.y_off = self.y_off + master.y_off
-        #    self.rot = self.rot + master.rot
-                
         for entity in block.entities:
-            #_tag = canvas.c.find_withtag(self.tag)
-            #_tag = canvas.c.gettags(_tag)
             f = funit[entity.type]
             i = f(canvas, entity, self)
-            #if i.tag and not _tag:
-            canvas.c.addtag_withtag(i.tag, self.tag)
-            #else:
-            #    canvas.c.addtag_withtag(self.tag, _tag[0])
+            print "(", entity.type, i.tag, self.x_off, self.y_off, ")",
+            rotate(canvas.c, i.tag, self.rot)
+            canvas.c.move(i.tag, self.x_off, -self.y_off)
+            canvas.c.addtag_withtag(self.tag, i.tag)
+        print
+ 	if not master:
+	    canvas.c.move(self.tag, 0, canvas.h)           
 
-        #rotate(canvas.c, self.tag, self.rot)
-        canvas.c.move(self.tag, self.x_off, self.y_off)
-            
+        
 	INSERT.cnt += 1
             
     def mouse_push(self, event):
         print "INSERT", self.tag,
         for kw in self.e.data:
-            print kw, "=", self.e.data[kw]
+             kw, "=", self.e.data[kw]
 
 class LEADER:
 	cnt = 0
@@ -254,7 +250,7 @@ class TEXT:
             x = e.data["10"]
             y = e.data["20"] + (h / 2)
             txt = e.data["1"]
-            
+            print txt
             # optional fields
             if e.data.has_key("72"):
                 h_just = ("w", "", "e", "aligned", "middle", "fit")
@@ -292,7 +288,7 @@ class TEXT:
                 h /= e.data["41"]
                 h = int(h)
             
-            font = ("Helvetica", str(h))
+            font = ("Helvetica", "20") #str(h))
             self.tag = canvas.c.create_text(x, y, font=font,
                                             text = txt,
                                             tags = str(h),
