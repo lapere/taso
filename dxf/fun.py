@@ -199,7 +199,57 @@ class MLINE:
 class MTEXT:
 	cnt = 0
 	def __init__(self, canvas, e, master=None):
-		MTEXT.cnt += 1
+
+            # core fields
+            h = int(e.data["40"])
+            x = e.data["10"]
+            y = e.data["20"] + (h / 2)
+            txt = e.data["1"]
+            
+	    # optional fields
+            if e.data.has_key("72"):
+                h_just = ("w", "", "e", "aligned", "middle", "fit")
+                h_just = h_just[e.data["72"]]
+            else:
+                h_just = "w"
+                
+            if e.data.has_key("73"):
+                v_just = ("s","s", "", "n")
+                v_just = v_just[e.data["73"]]
+            else:
+                v_just = ""
+
+            if h_just == "aligned":
+                print "alig"
+                return
+            if h_just == "middle":
+                #x2 = e.data["11"]
+                #y2 = e.data["21"]
+                #h_scale =  (y2 * scale - y) / (len(txt) * h) 
+                #h *= h_scale 
+                #h = int(h)
+                h_just = ""
+                return
+            if h_just == "fit":
+                print "fit"
+                return
+
+            if v_just+h_just == "":
+                just = "center"
+            else:
+                just = v_just+h_just
+
+            if e.data.has_key("41"):
+                h /= e.data["41"]
+                h = int(h)
+            
+            font = ("Helvetica", str(h))
+            self.tag = canvas.c.create_text(x, y, font=font,
+                                            text = txt,
+                                            tags = str(h),
+                                            anchor = just)
+            canvas.font = h
+	    MTEXT.cnt += 1
 class OLEFRAME:
 	cnt = 0
 	def __init__(self, canvas, e, master=None):
@@ -295,6 +345,7 @@ class TEXT:
                                             anchor = just)
             canvas.font = h
 	    TEXT.cnt += 1
+
 class TOLERANCE:
 	cnt = 0
 	def __init__(self, canvas, e, master=None):

@@ -63,6 +63,14 @@ class FontEditor(Frame):
         self.canvas.bind("<Button-3>", self.rubber_stop)
 
         self.letters = pickle.load(open('save.p'))
+	rl = []
+	for l in self.letters:
+		if type(l) != str:
+			rl.append(l)
+		if len(l) != 1:
+			rl.append(l)
+	for l in rl:
+		self.letters.pop(l)
         self.do_letter_menus(self.letters)
         
         
