@@ -85,8 +85,18 @@ class FontEditor(Frame):
             else:
                 self.mb.addCommand("Muut", lambda l=letter: self.do(l), letter)
 
+    def cmd_debug(self, letter):
+        print 
+        print letter + "*"*(80-len(letter)) 
+        for l in self.letters[letter]:
+            print l
+        print "*"*80 
+        print
+
     def do(self, letter):
         self.letter_name.set(letter)
+        self.hint.set("Viivoja: %d" % len(self.letters[letter]))
+        self.cmd_debug(letter)
         for line in self.letters[letter]:
             if type(line) == tuple:
                 arg = []
