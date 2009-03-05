@@ -4,6 +4,8 @@ from cad_kernel import *
 import  current
 canvas = current.canvas
 
+
+
 def l(startp = None):
     if canvas._more:
         if not startp:

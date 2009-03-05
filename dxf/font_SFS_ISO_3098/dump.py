@@ -5,5 +5,6 @@ import pickle
 letters = pickle.load(open('save.p'))
 print "chr = {",
 for kw in letters:
-    print "\"%s\":%s," % (kw, str(letters[kw]))
+    for line in letters[kw]:
+        print "\"%s\":%s," % (kw, str(letters[kw]))
 print "}"
