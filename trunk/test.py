@@ -47,7 +47,7 @@ class Test:
         self.mf.addCommand("Elementti","X", txt.canvas.xElement)
         self.mf.addCommand("Elementti","Y", txt.canvas.yElement)
         self.mf.addCommand("Elementti","Kulma", txt.canvas.angleElement)
-        
+        self.mf.addCommand("Elementti","Ympyrä", txt.canvas.circleElement)
         
     def load_user_tools(self):
         "lataa user tools"
