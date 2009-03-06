@@ -305,10 +305,11 @@ class cad_canvas(ScrolledCanvas):
         if value == None:
             x1 = point.x
             y1 = point.y
-            p2 = self.point() 
-            value = DistBetweenTwoPoint(x1, y1, p2.x, p2.y)
+            x2, y2 = self._get_point()
+            value = DistBetweenTwoPoint(x1, y1, x2, y2)
             
         tmp = _C(self, point, value)
+        p2 = self.point(x2,y2)
         tmp.new_formula("hypot(%s-%s,%s-%s)" % (x1.tag, p2.x.tag, y1.tag ,p2.y.tag))
         tmp.repaint()
         return tmp
@@ -441,8 +442,9 @@ class cad_canvas(ScrolledCanvas):
         self.repaint()
         
     def print_status(self, event=None):
+        print "status"+"*"*(80-len("status"))
         for kw in self.items:
-            print "\t",
-            print kw,
-            if self.items[kw]():
-                print self.items[kw]()    
+            i = self.items[kw]
+            print kw,"=", i.value,"\"", i.formula, "\"",  
+            print "slaves:[",i.slaves.keys(), "] names:[", i.names.keys(), "]"
+            print 
