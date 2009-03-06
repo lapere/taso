@@ -201,7 +201,7 @@ class _C(VisualItem):
 
     def __init__(self, canvas, point, r):
         self.line_list_param = [0,0,100,100]
-        VisualItem.__init__(self, canvas, "A", r)
+        VisualItem.__init__(self, canvas, "C", r)
     
         self.point = point
         self.point.fellows.update({self.tag:self})

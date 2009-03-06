@@ -125,7 +125,6 @@ def my():
     p.x.hide()
     p.y.hide()
     
-    
     canvas.items.recalc()
     canvas.repaint()
     
