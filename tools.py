@@ -53,7 +53,7 @@ def radp(x,y,x0,y0):
                     
         return -alfa
 
-def  solve_circle_circle(x0, y0, r0, x1, y1 r1):
+def  solve_circle_circle(x0, y0, r0, x1, y1, r1):
 
   #dx and dy are the vertical and horizontal distances between
   #the circle centers.
