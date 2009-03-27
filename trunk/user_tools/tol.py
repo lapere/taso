@@ -6,15 +6,16 @@ canvas = current.canvas
 
 
 
-def l(startp = None):
+def line(startp = None):
     if canvas._more:
         if not startp:
-            startp = canvas.point()
-            l(startp)
+            sp = canvas.point()
+            line(sp)
         else:
             endp = canvas.point()
+            print endp
             canvas.line(startp, endp)
-            l(endp)
+            line(endp)
     
 def porras(cnt):
     p = canvas.point()
@@ -138,6 +139,16 @@ def radp():
     a = canvas.angleElement(p1, "radp(%s,%s,%s,%s)" % (p1.x.tag, p1.y.tag, p2.x.tag, p2.y.tag))
     
     canvas.repaint()
+
+def kampi():
+    p1 = canvas.point()
+    p2 = canvas.point()
+    rad = utils.RadBetweenTwoPoint(p1.x, p1.y, p2.x, p2.y)
+    a = canvas.angleElement(p1, rad)
+    p2.x.new_formula("%s + cos(%s) * 100" % (p1.x.tag, a.tag))
+    p2.y.new_formula("%s - sin(%s) * 100" % (p1.y.tag, a.tag))
+    canvas.repaint()
+
 
 def test(n):
     last = canvas.xElement("100")
