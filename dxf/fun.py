@@ -39,7 +39,7 @@ class ARC:
 
             start_x = x + cos(radians(angle)) * r
             start_y = y + sin(radians(angle)) * r
-            
+            print angle 
             self.tag = Arc._arc(canvas, center=(x, y),
                                           radius=r,
                                           astart = start,
@@ -126,9 +126,10 @@ class INSERT:
             f = funit[entity.type]
             i = f(canvas, entity, self)
             print "(", entity.type, i.tag, self.x_off, self.y_off, ")",
-            rotate(canvas.c, i.tag, self.rot)
-            canvas.c.move(i.tag, self.x_off, -self.y_off)
-            canvas.c.addtag_withtag(self.tag, i.tag)
+            if i.tag:
+                rotate(canvas.c, i.tag, self.rot)
+                canvas.c.move(i.tag, self.x_off, -self.y_off)
+                canvas.c.addtag_withtag(self.tag, i.tag)
         print
  	if not master:
 	    canvas.c.move(self.tag, 0, canvas.h)           
@@ -240,8 +241,9 @@ class MTEXT:
                 just = v_just+h_just
 
             if e.data.has_key("41"):
-                h /= e.data["41"]
-                h = int(h)
+                if e.data["41"]:
+                    h /= e.data["41"]
+                    h = int(h)
             
             font = ("Helvetica", str(h))
             self.tag = canvas.c.create_text(x, y, font=font,

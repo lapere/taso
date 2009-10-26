@@ -7,6 +7,8 @@ def rotate_points(x, y, angle):
         return x_tmp, y_tmp
 
 def rotate(canvas, tag, angle):
+    if not tag:
+        return
     tags =  canvas.find_withtag(tag)
     for tag in tags:
             pnts = canvas.coords(tag)
