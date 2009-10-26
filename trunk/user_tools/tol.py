@@ -149,6 +149,18 @@ def kampi():
     p2.y.new_formula("%s - sin(%s) * 100" % (p1.y.tag, a.tag))
     canvas.repaint()
 
+def y_leikkaus():
+    p1 = canvas.point()
+    p2 = canvas.point()
+    p3 = canvas.point()
+    c1 = canvas.circleElement(p1, 100)
+    c2 = canvas.circleElement(p2, 100)
+    p3.x.new_formula("solve_circle_circle(%s, %s, %s, %s, %s, %s)[0][0]" %
+                     (p1.x.tag, p1.y.tag, c1.tag, p2.x.tag, p2.y.tag, c2.tag))
+    p3.y.new_formula("solve_circle_circle(%s, %s, %s, %s, %s, %s)[0][1]" %
+                     (p1.x.tag, p1.y.tag, c1.tag, p2.x.tag, p2.y.tag, c2.tag))
+    canvas.repaint()
+ 
 
 def test(n):
     last = canvas.xElement("100")

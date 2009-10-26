@@ -309,8 +309,6 @@ class cad_canvas(ScrolledCanvas):
             value = DistBetweenTwoPoint(x1, y1, x2, y2)
             
         tmp = _C(self, point, value)
-        p2 = self.point(x2,y2)
-        tmp.new_formula("hypot(%s-%s,%s-%s)" % (x1.tag, p2.x.tag, y1.tag ,p2.y.tag))
         tmp.repaint()
         return tmp
     
