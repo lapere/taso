@@ -134,7 +134,8 @@ class FontEditor(Frame):
         for tag in self.canvas.find_withtag("l"):
             coords = self.canvas.coords(tag)
             lst.append(coords)
-        
+         
+
         self.letters[name] = lst
         fd = open('save.p','w')
         pickle.dump(self.letters, fd)
