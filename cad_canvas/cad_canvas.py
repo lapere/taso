@@ -1,10 +1,9 @@
 from Tkinter import *
 from time import sleep
-from default_tools.level import _X,_Y,_A,_C
+from default_tools.level import _X,_Y,_A
 from default_tools.point import Point
 from default_tools.line import Line
 from default_tools.text import Txt
-from default_tools.selection import Selection
 from default_tools.utils import *
 
 from cad_kernel import db
@@ -36,8 +35,7 @@ class cad_canvas(ScrolledCanvas):
         self.lasty = 0
         self._scale = 1.0
         self.master = master
-        self.rb = None
-        
+
         self.cmd = StringVar(self)
         self.e = Entry(self, width=3, bg="white",
                        relief=FLAT, bd=0, textvariable=self.cmd)
@@ -45,20 +43,9 @@ class cad_canvas(ScrolledCanvas):
         self.bind("<Button-3>", self.noMore)
         self.bind_all("<KeyPress-Shift_L>", self.shift_press) 
         self.bind_all("<KeyRelease-Shift_L>", self.shift_release)
-        self.bind_all("<KeyPress>", self.keypress)
-        self.bind_all("<KeyRelease>", self.keyrelease)
-        self.bind_all ("<Motion>", self.motion)
+        #self.event_add ( "<<panic>>", "<B1-Motion>")
 
-    def motion(self, event):
-        self.x = self.canvasx(event.x) / self._scale
-        self.y = self.canvasy(event.y) / self._scale
 
-    def keypress(self, event):
-        pass
-
-    def keyrelease(self, event):
-        pass
-    
     def shift_press(self, event):
         for tag in self.items:
             self.items[tag].unhide()
@@ -69,9 +56,7 @@ class cad_canvas(ScrolledCanvas):
                 self.items[tag].hide()   
         
     def noMore(self, event):
-        if self.rb:
-            self.delete(self.rb)
-            self.rb = None
+        print "nomore"
         self.delete(self.id)
         self.bind("<Button-3>", self.noMore)
         self.unbind("<Button-1>")
@@ -80,31 +65,17 @@ class cad_canvas(ScrolledCanvas):
         self._more = False
         
         
-    def _get_point(self, event=None, rubberbox=None):
-        
+    def _get_point(self, event=None):
         if not event:
             self.bind("<Button-1>", self._get_point)
             self.sema = True
             self._more = True
 
             while self.sema:
-                if rubberbox and not self.rb:
-                    self.rb = self.create_rectangle(0, 0, 0, 0)
-                elif self.rb:
-                    x0 = rubberbox[0]
-                    y0 = rubberbox[1]
-                    x1 = self.x
-                    y1 = self.y
-                    self.coords(self.rb, x0, y0, x1, y1)
                 self.update()
                 sleep(0.1)
                 if not self._more:
-                    self.delete(self.rb)
-                    self.rb = None
                     return None, None
-            if self.rb:
-                self.delete(self.rb)
-                self.rb = None
             return self.x / self._scale, self.y / self._scale
         else:
             self.x = self.canvasx(event.x) 
@@ -299,19 +270,6 @@ class cad_canvas(ScrolledCanvas):
         tmp.repaint()
         return tmp
 
-    def circleElement(self, point=None, value=None):
-        if point == None:
-            point = self.point()
-        if value == None:
-            x1 = point.x
-            y1 = point.y
-            x2, y2 = self._get_point()
-            value = DistBetweenTwoPoint(x1, y1, x2, y2)
-            
-        tmp = _C(self, point, value)
-        tmp.repaint()
-        return tmp
-    
     def line(self, startp=None, endp=None):
         if startp == None:
             startp = self.point()
@@ -332,38 +290,7 @@ class cad_canvas(ScrolledCanvas):
         t.repaint()
         return t
     
-    def _select(self):
-        self._more = True
-        p_list = []
-        while self._more:
-            p_list.append(self.point())
-        s = Selection(self, p_list)
-        s.repaint()
-        return s
-
-    def select_rect(self):
-        p_list = []
-
-        x0,y0 = self._get_point()
-        if not x0 or not y0:
-            return
-
-        x1,y1 = self._get_point(rubberbox=(x0,y0))
-        if not x1 or not y1:
-            return
-
-        l = self.find_enclosed(x0, y0, x1, y1)
-        if not l:
-            return
-        
-        l = map(lambda x:self.gettags(x)[0], l)
-        for i in l:
-            if i[0] == "P":
-                p_list.append(self.items[i])
-        s = Selection(self, p_list)
-        s.repaint()
-        return s
-    
+                 
     def _delete(self, event=None):
         if not event:
             self.bind("<Button-1>", self._delete)
@@ -372,7 +299,7 @@ class cad_canvas(ScrolledCanvas):
             if tag:
                 if self.items.has_key(tag):
                     self.items[tag].delete()
-    
+
     def hide(self, event=None):
         if not event:
             self.bind("<Button-1>", self.hide)
@@ -440,9 +367,8 @@ class cad_canvas(ScrolledCanvas):
         self.repaint()
         
     def print_status(self, event=None):
-        print "status"+"*"*(80-len("status"))
         for kw in self.items:
-            i = self.items[kw]
-            print kw,"=", i.value,"\"", i.formula, "\"",  
-            print "slaves:[",i.slaves.keys(), "] names:[", i.names.keys(), "]"
-            print 
+            print "\t",
+            print kw,
+            if self.items[kw]():
+                print self.items[kw]()    

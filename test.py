@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#P.R 2005
 
 from Tkinter import *
 from cad_canvas import *
@@ -36,8 +35,6 @@ class Test:
         self.mf.addCommand("Tiedosto","Poistu", root.quit)
 
         self.mf.addCommand("Muokkaa","Poista", txt.canvas._delete)
-        self.mf.addCommand("Muokkaa","Valitse", txt.canvas._select)
-        self.mf.addCommand("Muokkaa","Valitse_alue", txt.canvas.select_rect)
         self.mf.addCommand("Muokkaa","Piilota", txt.canvas.hide)
         self.mf.addCommand("Muokkaa","Älä piilota", txt.canvas.unhide)
 
@@ -48,10 +45,10 @@ class Test:
         self.mf.addCommand("Elementti","X", txt.canvas.xElement)
         self.mf.addCommand("Elementti","Y", txt.canvas.yElement)
         self.mf.addCommand("Elementti","Kulma", txt.canvas.angleElement)
-        self.mf.addCommand("Elementti","Ympyrä", txt.canvas.circleElement)
+        
         
     def load_user_tools(self):
-        "lataa user tools"
+        "lataa default tools"
         fp, pathname, description = imp.find_module("user_tools")
 
         try:

@@ -19,12 +19,14 @@ class Point(VisualItem):
         self.selected_fill = dict(fill="green", outline="black")
         self.hidden_fill = dict(fill="", outline="")            
 
-        self.style = dict(current.point_style)
         self.create_visibles()
         
     def create_visibles(self):
-        self.style.update(dict(tags=self.tag))
-        self.id = self.canvas.create_rectangle(0, 0, 0, 0, self.style)
+        
+        self.id = self.canvas.create_rectangle(0, 0, 0, 0,
+                                               fill="",
+                                               outline="black",
+                                               tags=self.tag)
         
         if not self.visible:
             self.hide()
