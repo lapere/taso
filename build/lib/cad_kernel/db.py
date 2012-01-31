@@ -119,9 +119,9 @@ class ItemDB(IterableUserDict):
         pickle.dump(db, fd)
         fd.close()
         
-        db = ItemDB()
-        #db = pickle.load(open(fn))
-       
+        #db = ItemDB()
+        db = pickle.load(open(fn))
+        print db.cnt
         while True:
             raw = raw_input("PR:>")
             raw = raw.split("=")
