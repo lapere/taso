@@ -5,7 +5,7 @@ from cad_kernel.db import Item
 class VisualItem(Item):
 
     def __init__(self, canvas, base_tag, formula):
-        Item.__init__(self, canvas.items, base_tag, str(formula))
+        Item.__init__(self, canvas.items, base_tag, formula)
         
         self.canvas = canvas
 
@@ -14,7 +14,6 @@ class VisualItem(Item):
         self.selected_fill = None
         self.hidden_fill = None
 
-        self.style = dict()
         self.org_point = None
         self.id = None
         self.selected = False
@@ -26,29 +25,20 @@ class VisualItem(Item):
     def bindit(self):
         self.canvas.tag_bind(self.tag, "<Button-1>", self.mouse_push)
         self.canvas.tag_bind(self.tag, "<Shift-Button-1>", self.mouse_select)
-        
-        #self.canvas.tag_bind(self.tag, "<Enter>", self.mouse_enter)
-        #self.canvas.tag_bind(self.tag, "<Leave>", self.mouse_leave)
+        self.canvas.tag_bind(self.tag, "<Enter>", self.mouse_enter)
+        self.canvas.tag_bind(self.tag, "<Leave>", self.mouse_leave)
         self.canvas.tag_bind(self.tag, "<Double-Button-1>", self.mouse_double)
         self.canvas.tag_bind(self.tag, "<Double-Button-3>", self.print_status)
-        
-    def unbind(self):
-        self.canvas.tag_unbind(self.tag, "<Button-1>")
-        self.canvas.tag_unbind(self.tag, "<Shift-Button-1>")
-        #self.canvas.tag_unbind(self.tag, "<Enter>")
-        #self.canvas.tag_unbind(self.tag, "<Leave>")
-        self.canvas.tag_unbind(self.tag, "<Double-Button-1>")
-        self.canvas.tag_unbind(self.tag, "<Double-Button-3>")
 
+    
     def mouse_enter(self, event):
         if self.tag[0] == "P":
             self.canvas.tag_raise(self.tag)
             #self.repaint()
-        #self.active_color()
+        self.active_color()
 
     def mouse_leave(self, event):
-        pass
-        #self.passive_color()
+        self.passive_color()
 
     def mouse_push(self, event):
         self.org_x = self.canvas.canvasx(event.x)
@@ -69,28 +59,19 @@ class VisualItem(Item):
         self.canvas.e['width'] = len(self.canvas.cmd.get()) + 1
         if event.keysym == "Return":
             self.new_formula(self.canvas.cmd.get())
-            #self.canvas.items.recalc()
+            self.canvas.items.recalc()
             self.canvas.repaint()
             self.canvas.delete(self.id_txt)
             self.canvas.focus_set()
-            
         
     def mouse_select(self, event):
+
         if self.visible:
-            self.visible = False
             self.hide()
         else:
-            self.visible = True
             self.unhide()
-
-    def mouse_hide(self, event):
-        if self.visible:
-            self.visible = False
-            self.hide()
-        else:
-            self.visible = True
-            self.unhide()
-
+            
+            
     def repaint(self):
         pass
         
@@ -98,21 +79,39 @@ class VisualItem(Item):
         self.canvas.itemconfig(self.tag, self.active_fill)
 
     def passive_color(self):
-        self.canvas.itemconfig(self.tag, self.passive_fill)
+        if self.selected:
+            self.canvas.itemconfig(self.tag, self.selected_fill)
+        else:
+            self.canvas.itemconfig(self.tag, self.passive_fill)
 
     def selected_color(self):
         self.canvas.itemconfig(self.tag, self.selected_fill)
         
 
     def hide(self, event=None):
-        self.style["state"] = "hidden"
-        #self.unbind()
-        self.canvas.itemconfig(self.tag, self.style)
+        self.visible =  False
+        self.canvas.tag_unbind(self.tag, "<Leave>")
+        self.canvas.tag_unbind(self.tag, "<Enter>")
+        self.canvas.itemconfig(self.tag, self.hidden_fill)
         
     def unhide(self):
-        self.style["state"] = "normal"
-        #self.bindit()
-        self.canvas.itemconfig(self.tag, self.style)
+        self.visible = True
+        self.canvas.tag_bind(self.tag, "<Leave>", self.mouse_leave)
+        self.canvas.tag_bind(self.tag, "<Enter>", self.mouse_enter)
+        self.canvas.itemconfig(self.tag, self.passive_fill)
+
+    def show(self):
+        self.showed = True
+        self.canvas.itemconfig(self.tag, self.passive_fill)
+        self.canvas.tag_bind(self.tag, "<Leave>", self.mouse_leave)
+        self.canvas.tag_bind(self.tag, "<Enter>", self.mouse_enter)
+
+    def unshow(self):
+        self.showed = False
+        if self.visible:
+            self.unhide()
+        else:
+            self.hide()
         
     def delete(self):
         for fell in self.fellows:

@@ -1,21 +1,16 @@
 from math import *
 from default_tools import *
 from cad_kernel import *
-import  current
-canvas = current.canvas
 
-
-
-def line(startp = None):
+def l(startp = None):
     if canvas._more:
         if not startp:
-            sp = canvas.point()
-            line(sp)
+            startp = canvas.point()
+            l(startp)
         else:
             endp = canvas.point()
-            print endp
             canvas.line(startp, endp)
-            line(endp)
+            l(endp)
     
 def porras(cnt):
     p = canvas.point()
@@ -72,7 +67,7 @@ def m():
                       })
     
     
-    #canvas.items.recalc()
+    canvas.items.recalc()
     canvas.repaint()
 
 
@@ -126,6 +121,7 @@ def my():
     p.x.hide()
     p.y.hide()
     
+    
     canvas.items.recalc()
     canvas.repaint()
     
@@ -138,29 +134,8 @@ def radp():
     p2 = canvas.point()
     a = canvas.angleElement(p1, "radp(%s,%s,%s,%s)" % (p1.x.tag, p1.y.tag, p2.x.tag, p2.y.tag))
     
+    canvas.items.recalc()
     canvas.repaint()
-
-def kampi():
-    p1 = canvas.point()
-    p2 = canvas.point()
-    rad = utils.RadBetweenTwoPoint(p1.x, p1.y, p2.x, p2.y)
-    a = canvas.angleElement(p1, rad)
-    p2.x.new_formula("%s + cos(%s) * 100" % (p1.x.tag, a.tag))
-    p2.y.new_formula("%s - sin(%s) * 100" % (p1.y.tag, a.tag))
-    canvas.repaint()
-
-def y_leikkaus():
-    p1 = canvas.point()
-    p2 = canvas.point()
-    p3 = canvas.point()
-    c1 = canvas.circleElement(p1, 100)
-    c2 = canvas.circleElement(p2, 100)
-    p3.x.new_formula("solve_circle_circle(%s, %s, %s, %s, %s, %s)[0][0]" %
-                     (p1.x.tag, p1.y.tag, c1.tag, p2.x.tag, p2.y.tag, c2.tag))
-    p3.y.new_formula("solve_circle_circle(%s, %s, %s, %s, %s, %s)[0][1]" %
-                     (p1.x.tag, p1.y.tag, c1.tag, p2.x.tag, p2.y.tag, c2.tag))
-    canvas.repaint()
- 
 
 def test(n):
     last = canvas.xElement("100")

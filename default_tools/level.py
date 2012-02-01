@@ -1,7 +1,7 @@
 from Tkinter import *
 from item import *   
 from utils import *
-import current
+
 
 class _X(VisualItem):
 
@@ -12,21 +12,20 @@ class _X(VisualItem):
         self.active_fill = dict(fill="red")
         self.passive_fill = dict(fill="gray")
         self.selected_fill = dict(fill="green")
-        self.hidden_fill = dict(fill="")
-        
-        self.style = dict(current.level_style)
+        self.hidden_fill = dict(fill="")            
+
+        self.line_kw_param = dict(width=1, fill="gray", tags=self.tag)
         self.create_visibles()
-        self.visible = False
-        self.hide()
         
                 
     def create_visibles(self):
-        self.style.update(dict(tags=self.tag))
+        
         self.id = self.canvas.create_line(self.line_list_param,
-                                          self.style)
+                                          self.line_kw_param)
         self.canvas.tag_lower(self.tag)
         self.bindit()
-        self.canvas.tag_bind(self.tag, "<B1-Motion>", self.move)
+        if not self.visible:
+            self.hide()
         return self.id
 
     def repaint(self):
@@ -37,16 +36,6 @@ class _X(VisualItem):
                            self.value * s,
                            self.canvas["height"])
 
-    def move(self, event):
-        if self.visible:
-            x = int(self.canvas.canvasx(event.x))
-            s = self.canvas._scale
-        
-            if not self.names: 
-               self.new_formula(str(x / s))
-            
-            self.canvas.repaint()
-        
     def get_x(self):
         return self() * self.canvas._scale
 
@@ -71,20 +60,17 @@ class _Y(VisualItem):
         self.selected_fill = dict(fill="green")
         self.hidden_fill = dict(fill="")            
 
-        self.style = dict(current.level_style)
-        
+        self.line_kw_param = dict(width=1, fill="gray", tags=self.tag)
         self.create_visibles()
-        self.visible = False
-        self.hide()
         
                 
     def create_visibles(self):
-        self.style.update(dict(tags=self.tag))
         self.id = self.canvas.create_line(self.line_list_param,
-                                          self.style)
+                                          self.line_kw_param)
         self.canvas.tag_lower(self.tag)
         self.bindit()
-        self.canvas.tag_bind(self.tag, "<B1-Motion>", self.move)
+        if not self.visible:
+            self.hide()
         return self.id
 
     def repaint(self):
@@ -94,16 +80,7 @@ class _Y(VisualItem):
                            self.value * s,
                            self.canvas["width"],
                            self.value * s)
-    def move(self, event):
-        if self.visible:
-            y = int(self.canvas.canvasx(event.y))
-            s = self.canvas._scale
-        
-            if not self.names: 
-               self.new_formula(str(y / s))
-            
-            self.canvas.repaint()
-    
+
     def get_y(self):
         return self() * self.canvas._scale
             
@@ -131,37 +108,20 @@ class _A(VisualItem):
         self.selected_fill = dict(fill="green")
         self.hidden_fill = dict(fill="")            
 
-        self.style = dict(current.level_style)
+        self.line_kw_param = dict(width=1, fill="gray", tags=self.tag)
         self.create_visibles()
         
                 
     def create_visibles(self):
-        self.style.update(dict(tags=self.tag))
+        
         self.id = self.canvas.create_line(self.line_list_param,
-                                          self.style)
+                                          self.line_kw_param)
         self.canvas.tag_lower(self.tag)
         if not self.visible:
             self.hide()
         self.bindit()
-        self.canvas.tag_bind(self.tag, "<B1-Motion>", self.move)
         return self.id
-
-    def move(self, event):
-        
-        if self.visible:
-            x = int(self.canvas.canvasx(event.x))
-            y = int(self.canvas.canvasy(event.y))
-
-            xx = float(self.point.x)
-            yy = float(self.point.y)
-
-            a =  RadBetweenTwoPoint(x,y,xx,yy)
-            
-            if not self.names: 
-               self.new_formula(str(a))
-            
-            self.canvas.repaint()
-        
+    
     def repaint(self):
         x = self.point.x
         y = self.point.y
@@ -196,69 +156,3 @@ class _A(VisualItem):
         x = float(self.point.x)	#self.canvas.coords(self.id)[0]
         y = float(self.point.y)	#self.canvas.coords(self.id)[1]
         return float(-self.A() * x - self.B() * y)
-
-class _C(VisualItem):
-
-    def __init__(self, canvas, point, r):
-        self.line_list_param = [0,0,100,100]
-        VisualItem.__init__(self, canvas, "C", r)
-    
-        self.point = point
-        self.point.fellows.update({self.tag:self})
-
-        self.active_fill = dict(fill="red")
-        self.passive_fill = dict(fill="gray")
-        self.selected_fill = dict(fill="green")
-        self.hidden_fill = dict(fill="")            
-
-        self.style = dict(current.circle_level_style)
-        self.create_visibles()
-        
-                
-    def create_visibles(self):
-        self.style.update(dict(tags=self.tag))
-        self.id = self.canvas.create_oval(self.line_list_param,
-                                          self.style)
-        self.canvas.tag_lower(self.tag)
-        if not self.visible:
-            self.hide()
-        self.bindit()
-        self.canvas.tag_bind(self.tag, "<B1-Motion>", self.move)
-        return self.id
-
-    def move(self, event):
-        
-        if self.visible:
-            x = int(self.canvas.canvasx(event.x))
-            y = int(self.canvas.canvasy(event.y))
-
-            xx = float(self.point.x)
-            yy = float(self.point.y)
-
-            r =  DistBetweenTwoPoint(x,y,xx,yy)
-            
-            if not self.names: 
-               self.new_formula(str(r))
-            
-            self.canvas.repaint()
-
-        
-    def repaint(self):
-        px = self.point.x * self.canvas._scale
-        py = self.point.y * self.canvas._scale
-        r = self.value * self.canvas._scale
-        l = [px-r, py-r, px+r, py+r]
-        
-        self.canvas.coords(self.id, l[0], l[1], l[2], l[3])        
-        #self.canvas.scale(self.id, _x, _y, m/10, m/10)
-        
-    def A(self):
-        return float(self.point.x) / 2
-
-    def B(self):
-        return float(self.point.y) / 2
-
-    def C(self):
-        x = float(self.point.x + self.value)
-        y = float(self.point.y + self.value)
-        return float(-x**2 - y**2   -self.A() - self.B())

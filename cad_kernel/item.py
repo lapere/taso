@@ -8,73 +8,69 @@ class Item:
         db.register_item(self)
         self.code = None
         self.value = None
-        self.names = dict()
-        self.slaves = dict()
+        self.names = []
         self.db = db
-        if formula:
-            if self.find_deps(formula):
-                self.calc()
+        if formula != None:
+            self.formula = str(formula)
+            self.find_deps()
+            self.calc()
 	else:
-            self.formula = False
+            self.formula = None
 
+    def has_circular_ref(self, names):
+        "käy rekursiivisesti läpi viittaukset etsien takaisin viittauksia"
+        pass
+        """
+        while len(names):
+            if self.tag in names: 
+                return True
+            if self.db.has_key(names[0]):
+                c = self.db[ names[0] ]
+                names = names + c.names
+            names = names[1:]
     
-    def find_deps(self, formula):
-        """etsii alkion muuttujat"""
-        try:
-            tmp_code = compile_command(formula)
-        except SyntaxError, detail:
-            print "Syntax error kohdassa:", detail.offset
-            return False
+        return False
+        """
+    
+    def find_deps(self):
+        "etsii alkion riippuvuudet ts. muuttujat jotka sen arvoon vaikuttavat"
+        self.code = compile_command(self.formula)
+        tmp_names = []
         
-        co_names = list(tmp_code.co_names)
-        
-        if self.tag in  co_names:
-            print "Viittaus itseensä:", self.tag, co_names
-            return False
-
-        tmp_names = dict()
-        for name in list(tmp_code.co_names):
+        for name in list(self.code.co_names):     
+            tmp_names.append(name)
             if self.db.has_key(name):
-                tmp_names.update({name : self.db[name]})
-                if self.db[name].names.has_key(self.tag):
-                    print "Circular reference", name, self.tag
-                    return False
-                #else:
-                    #    self.db[name].slaves.update({self.tag : self})
-        
-        # minä self, en ole enää vanhojen isäntien orja
-        for name in self.names:
-            if self.db[name].slaves.has_key(self.tag):
-                self.db[name].slaves.pop(self.tag)
-       
-        # vaan uusien isäntien orja
-        self.names = tmp_names
-        for name in self.names:
-            self.db[name].slaves.update({self.tag: self})
- 
-        self.formula = formula
-        self.code = compile_command(self.tag + ".value = " + self.formula)
-        return True
-        
+                tmp_names.extend(self.db[name].names)
+
+        if self.has_circular_ref(tmp_names):
+            print "Circular reference"
+        else:
+            self.names = tmp_names
+            self.code = compile_command("self.value=" + self.formula)
+
     def new_formula(self, kaava):
         "vaihtaa alkion kaavan"
-        if self.find_deps(kaava):
-            self.calc()
+        self.formula = kaava
+        self.find_deps()
+        self.calc()
         
     def calc(self):
         "laskee alkion arvon"
         try:
-            self.db.ic.runcode(self.code)
-            for s in self.slaves:
-                self.slaves[s].calc()
-        except RuntimeError, detail:
-            print detail
-            for s in self.slaves:
-                print s,
-                self.slaves[s].calc()
-        except  Exception, detail:
-            print detail
+            eval(self.code, dict(self.db.user_vars), locals())
+        except:
+            pass
 
+    def dep(self):
+        d = dict()
+        for n in self.names:
+            d[n] = self.db[n]
+            d.update(self.db[n].dep())
+        return d
+        
+    def __call__(self):
+        return self
+    
     """matemaattiset operaattorit luokalle"""
 
     def __add__(self, other):
@@ -145,10 +141,6 @@ class Item:
     def __setstate__(self, dicti):
         if dicti:
             self.__dict__.update(dicti)
-        self.code = compile_command(self.tag + ".value = " + self.formula)
-        
-        
-            
         
         
         

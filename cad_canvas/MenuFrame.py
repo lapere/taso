@@ -25,8 +25,6 @@ class MenuFrame(Frame):
         else:
             self.mb[menu_name].menus.add_command(label=command_name, underline=0, command=command)
 
-    def GetMenus(self):
-        return self.mb.keys()
 
 if __name__ == '__main__':
     root = Tk()
