@@ -14,7 +14,6 @@ class VisualItem(Item):
         self.selected_fill = None
         self.hidden_fill = None
 
-        self.style = dict()
         self.org_point = None
         self.id = None
         self.selected = False
@@ -26,17 +25,16 @@ class VisualItem(Item):
     def bindit(self):
         self.canvas.tag_bind(self.tag, "<Button-1>", self.mouse_push)
         self.canvas.tag_bind(self.tag, "<Shift-Button-1>", self.mouse_select)
-        
-        #self.canvas.tag_bind(self.tag, "<Enter>", self.mouse_enter)
-        #self.canvas.tag_bind(self.tag, "<Leave>", self.mouse_leave)
+        self.canvas.tag_bind(self.tag, "<Enter>", self.mouse_enter)
+        self.canvas.tag_bind(self.tag, "<Leave>", self.mouse_leave)
         self.canvas.tag_bind(self.tag, "<Double-Button-1>", self.mouse_double)
         self.canvas.tag_bind(self.tag, "<Double-Button-3>", self.print_status)
-        
+
     def unbind(self):
         self.canvas.tag_unbind(self.tag, "<Button-1>")
         self.canvas.tag_unbind(self.tag, "<Shift-Button-1>")
-        #self.canvas.tag_unbind(self.tag, "<Enter>")
-        #self.canvas.tag_unbind(self.tag, "<Leave>")
+        self.canvas.tag_unbind(self.tag, "<Enter>")
+        self.canvas.tag_unbind(self.tag, "<Leave>")
         self.canvas.tag_unbind(self.tag, "<Double-Button-1>")
         self.canvas.tag_unbind(self.tag, "<Double-Button-3>")
 
@@ -44,11 +42,10 @@ class VisualItem(Item):
         if self.tag[0] == "P":
             self.canvas.tag_raise(self.tag)
             #self.repaint()
-        #self.active_color()
+        self.active_color()
 
     def mouse_leave(self, event):
-        pass
-        #self.passive_color()
+        self.passive_color()
 
     def mouse_push(self, event):
         self.org_x = self.canvas.canvasx(event.x)
@@ -82,15 +79,7 @@ class VisualItem(Item):
         else:
             self.visible = True
             self.unhide()
-
-    def mouse_hide(self, event):
-        if self.visible:
-            self.visible = False
-            self.hide()
-        else:
-            self.visible = True
-            self.unhide()
-
+            
     def repaint(self):
         pass
         
@@ -105,14 +94,12 @@ class VisualItem(Item):
         
 
     def hide(self, event=None):
-        self.style["state"] = "hidden"
-        #self.unbind()
-        self.canvas.itemconfig(self.tag, self.style)
+        self.unbind()
+        self.canvas.itemconfig(self.tag, self.hidden_fill)
         
     def unhide(self):
-        self.style["state"] = "normal"
-        #self.bindit()
-        self.canvas.itemconfig(self.tag, self.style)
+        self.bindit()
+        self.canvas.itemconfig(self.tag, self.passive_fill)
         
     def delete(self):
         for fell in self.fellows:

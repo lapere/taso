@@ -10,48 +10,42 @@ class Point(VisualItem):
 
         self.x = x
         self.y = y
-
         x.fellows.update({self.tag:self})
         y.fellows.update({self.tag:self})
         
-        self.active_fill = dict(fill="red", outline="black")
-        self.passive_fill = dict(fill="", outline="")
-        self.selected_fill = dict(fill="green", outline="black")
-        self.hidden_fill = dict(fill="", outline="")            
-
-        self.style = dict(current.point_style)
+        #self.active_fill = dict(fill="red", outline="black")
+        #self.passive_fill = dict(fill="", outline="")
+        #self.selected_fill = dict(fill="green", outline="black")
+        #self.hidden_fill = dict(fill="", outline="")            
         self.create_visibles()
         
     def create_visibles(self):
-        self.style.update(dict(tags=self.tag))
-        self.id = self.canvas.create_rectangle(0, 0, 0, 0, self.style)
         
+        #self.id = self.canvas.create_rectangle(0, 0, 0, 0,
+        #                                       fill="",
+        #                                       outline="black",
+        #                                        tags=self.tag)
+        #self.canvas.addtag_withtag(self.tag, self.x.tag)
+        #self.canvas.addtag_withtag(self.tag, self.y.tag)
         if not self.visible:
             self.hide()
             
-        self.bindit()
-        self.canvas.tag_bind(self.tag, "<B1-Motion>", self.move)
-        self.canvas.tag_bind(self.tag, "<ButtonRelease-1>", self.join)
-        self.repaint()
+        #self.bindit()
+        
+        self.canvas.tag_bind(self.tag, "<<panic>>", self.move)
+        #self.canvas.tag_bind(self.tag, "<ButtonRelease-1>", self.join)
+        #self.repaint()
         return self.id
 
-    def move(self, event):
-        x = int(self.canvas.canvasx(event.x))
-        y = int(self.canvas.canvasy(event.y))
-        s = self.canvas._scale
-        xx = self.x
-        yy = self.y
-        if not xx.names:
-           xx.new_formula(str(x / s))
-        if not yy.names:
-           yy.new_formula(str(y / s))
         
-        self.canvas.repaint()   
+    def move(self, event):
+        print "moo"
+        pass
     
     def repaint(self):
         x = self.x * self.canvas._scale
         y = self.y * self.canvas._scale
-        self.canvas.coords(self.tag, x - 3, y - 3, x + 3, y + 3)
+        #self.canvas.coords(self.tag, x - 3, y - 3, x + 3, y + 3)
 
     def get_x(self):
         return self.canvas.coords(self.tag)[0] + 3
