@@ -3,7 +3,7 @@ from math import *
 
 class ScrolledCanvas(Canvas):
     def __init__(self, parent=None, **kw):
-        Canvas.__init__(self, **kw)
+        Canvas.__init__(self, kw)
    
         self.config(scrollregion=(0,0,800, 600))         
 
@@ -68,11 +68,10 @@ class ScrolledCanvas(Canvas):
         self.scan_mark(int(x * scale), int(y * scale))
         self.scan_dragto(x, y, gain=1)
         self.repaint()    
-
 if __name__ == '__main__':
     class Koe(ScrolledCanvas):
         def __init__(self, master, **kw):
-            ScrolledCanvas.__init__(self, **kw)
+            ScrolledCanvas.__init__(self, kw)
 
     root = Tk()
     c = Koe(root, bg="blue")
