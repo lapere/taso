@@ -4,7 +4,7 @@ import sys
 class Tool:
     toolbox = 100
     def __init__(self, canvas, tool, color, style):
-        d = "/home/lapere/Desktop/Dim/Dim-04_alias_pen/tools/"
+        d = "./tools/"
         self.base_name = d + tool
         self.cursor_str = ('@'+self.base_name+".xbm",
                            self.base_name+".xbm",
