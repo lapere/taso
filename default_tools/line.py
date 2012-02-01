@@ -2,12 +2,11 @@ from Tkinter import *
 from item import *
 from utils import *
 from cad_kernel.db import Item
-import current
 
 class Line(VisualItem):
 
     def __init__(self, canvas, startp, endp):
-        VisualItem.__init__(self, canvas, "L", None)
+        VisualItem.__init__(self, canvas, "L", None)#"%s,%s" % (startp.tag, endp.tag))
 
         self.startp = startp
         self.endp = endp
@@ -18,8 +17,7 @@ class Line(VisualItem):
         self.passive_fill = dict(fill="black")
         self.selected_fill = dict(fill="green")
         self.hidden_fill = dict(fill="")
-
-        self.style = dict(current.line_style)
+        self.style = dict()
         self.create_visibles()
         
     def create_visibles(self):
@@ -42,6 +40,7 @@ class Line(VisualItem):
         pass
     
     def repaint(self):
+
         
         x0 = self.startp.x
         y0 = self.startp.y
