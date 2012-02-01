@@ -12,7 +12,7 @@ class MenuFrame(Frame):
     def __init__(self, master):                        
             Frame.__init__(self, master)
             self.mb = dict()
-            c = 0;
+            self.addCommand("File", "None", self.no)
            
     def addCommand(self, menu_name, command_name, command=None):
     
@@ -25,9 +25,9 @@ class MenuFrame(Frame):
         else:
             self.mb[menu_name].menus.add_command(label=command_name, underline=0, command=command)
 
-    def GetMenus(self):
-        return self.mb.keys()
-
+    def no(self):
+        pass
+    
 if __name__ == '__main__':
     root = Tk()
     frame = MenuFrame(root)
