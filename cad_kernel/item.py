@@ -19,39 +19,20 @@ class Item:
 
     
     def find_deps(self, formula):
-        """etsii alkion muuttujat"""
-        try:
-            tmp_code = compile_command(formula)
-        except SyntaxError, detail:
-            print "Syntax error kohdassa:", detail.offset
-            return False
-        
-        co_names = list(tmp_code.co_names)
-        
-        if self.tag in  co_names:
-            print "Viittaus itseensä:", self.tag, co_names
-            return False
-
+        "etsii alkion muuttujat"
+        tmp_code = compile_command(formula)
         tmp_names = dict()
-        for name in list(tmp_code.co_names):
+        
+        for name in list(tmp_code.co_names):     
             if self.db.has_key(name):
                 tmp_names.update({name : self.db[name]})
                 if self.db[name].names.has_key(self.tag):
-                    print "Circular reference", name, self.tag
+                    print "Circular reference"
                     return False
-                #else:
-                    #    self.db[name].slaves.update({self.tag : self})
+                else:
+                    self.db[name].slaves.update({self.tag : self})
         
-        # minä self, en ole enää vanhojen isäntien orja
-        for name in self.names:
-            if self.db[name].slaves.has_key(self.tag):
-                self.db[name].slaves.pop(self.tag)
-       
-        # vaan uusien isäntien orja
         self.names = tmp_names
-        for name in self.names:
-            self.db[name].slaves.update({self.tag: self})
- 
         self.formula = formula
         self.code = compile_command(self.tag + ".value = " + self.formula)
         return True
@@ -63,17 +44,11 @@ class Item:
         
     def calc(self):
         "laskee alkion arvon"
-        try:
-            self.db.ic.runcode(self.code)
-            for s in self.slaves:
-                self.slaves[s].calc()
-        except RuntimeError, detail:
-            print detail
-            for s in self.slaves:
-                print s,
-                self.slaves[s].calc()
-        except  Exception, detail:
-            print detail
+        self.db.ic.runcode(self.code)
+        for s in self.slaves:
+            self.slaves[s].calc()
+        
+        
 
     """matemaattiset operaattorit luokalle"""
 
