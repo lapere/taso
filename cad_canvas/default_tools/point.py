@@ -6,51 +6,48 @@ import level
 class Point(VisualItem):
     
     def __init__(self, canvas, x, y):
-        VisualItem.__init__(self, canvas, "P", None)
-
+        VisualItem.__init__(self, canvas, "P")
+        
         self.x = x
         self.y = y
 
-        x.fellows.update({self.tag:self})
-        y.fellows.update({self.tag:self})
         
         self.active_fill = dict(fill="red", outline="black")
-        self.passive_fill = dict(fill="", outline="")
+        self.passive_fill = dict(fill="gray", outline="black")
         self.selected_fill = dict(fill="green", outline="black")
-        self.hidden_fill = dict(fill="", outline="")            
 
-        self.style = dict(current.point_style)
         self.create_visibles()
         
     def create_visibles(self):
-        self.style.update(dict(tags=self.tag))
-        self.id = self.canvas.create_rectangle(0, 0, 0, 0, self.style)
+       
+        x, y = level.solve_line(self.x.value, self.y.value)
+        self.id = self.canvas.create_rectangle(x - 3, y - 3, x + 3, y + 3,
+                                               fill="",
+                                               outline="black",
+                                               tags=self.tag)
         
-        if not self.visible:
-            self.hide()
-            
         self.bindit()
+        
         self.canvas.tag_bind(self.tag, "<B1-Motion>", self.move)
-        self.canvas.tag_bind(self.tag, "<ButtonRelease-1>", self.join)
-        self.repaint()
+        #self.canvas.tag_bind(self.tag, "<ButtonRelease-1>", self.join)
+        self.canvas.repaint()
         return self.id
 
-    def move(self, event):
-        x = int(self.canvas.canvasx(event.x))
-        y = int(self.canvas.canvasy(event.y))
-        s = self.canvas._scale
-        xx = self.x
-        yy = self.y
-        if not xx.names:
-           xx.new_formula(str(x / s))
-        if not yy.names:
-           yy.new_formula(str(y / s))
         
-        self.canvas.repaint()   
-    
+    def move(self, event):
+        
+        x = int(self.canvasx(event.x))
+        y = int(self.canvasy(event.y))
+
+        if not self.x.value.names: 
+           self.x.value.new_formula(str(x))
+        if not self.y.value.names: 
+           self.y.value.new_formula(str(y))
+           
+        self.canvas.repaint()
+        
     def repaint(self):
-        x = self.x * self.canvas._scale
-        y = self.y * self.canvas._scale
+        x, y = level.solve_line(self.x.value, self.y.value)
         self.canvas.coords(self.tag, x - 3, y - 3, x + 3, y + 3)
 
     def get_x(self):
@@ -169,4 +166,7 @@ class Point(VisualItem):
         return Points
     
             
-    
+    def hidden(self):
+        self.passive_fill.update(dict(outline="", fill=""))
+        self.passive_color()
+
