@@ -1,154 +1,149 @@
-# -*- coding: utf-8 -*-
+from Tkinter import *
+from fellow import *
 from code import *
+from spreadsheet import Formula
+
+import copy
 
 class Item:
     
-    def __init__(self, db, base_tag, formula):
-        self.tag = db.update_basetag(base_tag)
-        db.register_item(self)
-        self.code = None
-        self.value = None
-        self.names = dict()
-        self.slaves = dict()
-        self.db = db
-        if formula:
-            if self.find_deps(formula):
-                self.calc()
-	else:
-            self.formula = False
+    cnt = dict()
 
+    def __init__(self, canvas, base_tag):
+        
+        self.update_basetag(base_tag)
+        self.tag = base_tag + str(Item.cnt[base_tag])
+
+        self.canvas = canvas
+        self.fellows = Fellow()
+        self.active_fill = None
+        self.passive_fill = None
+        self.selected_fill = None
+        self.org_point = None
+        self.id = None
+        self.selected = False
+        self.canvas.items[self.tag] = self
+        
+
+    def update_basetag(self, base_tag):
+               
+        if Item.cnt.has_key(base_tag):
+            Item.cnt[base_tag] = Item.cnt[base_tag] + 1
+        else:
+            Item.cnt[base_tag] = 1
+            
+    def bindit(self):
+        self.canvas.tag_bind(self.tag, "<Button-1>", self.mouse_push)
+        self.canvas.tag_bind(self.tag, "<Shift-Button-1>", self.mouse_select)
+        self.canvas.tag_bind(self.tag, "<Enter>", self.mouse_enter)
+        self.canvas.tag_bind(self.tag, "<Leave>", self.mouse_leave)
+        self.canvas.tag_bind(self.tag, "<Double-Button-1>", self.mouse_double)
+        self.canvas.tag_bind(self.tag, "<Double-Button-3>", self.print_status)
+
+    def mouse_enter(self, event):
+        if self.tag[0] == "P":
+            self.canvas.tag_raise(self.tag)
+        self.active_color()
+        
+    def mouse_leave(self, event):
+        self.passive_color()
+
+    def mouse_push(self, event):
+        self.org_x = self.canvas.canvasx(event.x)
+        self.org_y = self.canvas.canvasy(event.y)
+        self.canvas.cmd.set(self.canvas.cmd.get() + self.tag)
+        self.canvas.e.icursor(END)
+        self.canvas.e['width'] = len(self.canvas.cmd.get()) + 1
+        self.canvas.update()
+        
+    def mouse_double(self, event):
+        self.canvas.cmd.set(self.canvas.S[self.tag].formula)
+        self.canvas.e.bind("<KeyPress>", self.g)
+        self.id_txt = self.canvas.create_window(event.x, event.y,
+                                                window=self.canvas.e)
+
+    def g(self, event):
+        self.canvas.e['width'] = len(self.canvas.cmd.get()) + 1
+        if event.keysym == "Return":
+            self.canvas.S[self.tag] = Formula(self.canvas.cmd.get())
+            self.canvas.S.recalc() 
+            self.canvas.repaint()
+            self.canvas.delete(self.id_txt)
     
-    def find_deps(self, formula):
-        """etsii alkion muuttujat"""
-        try:
-            tmp_code = compile_command(formula)
-        except SyntaxError, detail:
-            print "Syntax error kohdassa:", detail.offset
-            return False
+    def mouse_select(self, event):
+
+        if self.selected:
+            self.active_color()
+            self.selected = False
+        else:
+            self.selected_color()
+            self.selected = True
+            
+            
+    def repaint(self):
+        pass
         
-        co_names = list(tmp_code.co_names)
-        
-        if self.tag in  co_names:
-            print "Viittaus itseensä:", self.tag, co_names
-            return False
+    def active_color(self):
+        self.canvas.itemconfig(self.tag, self.active_fill)
 
-        tmp_names = dict()
-        for name in list(tmp_code.co_names):
-            if self.db.has_key(name):
-                tmp_names.update({name : self.db[name]})
-                if self.db[name].names.has_key(self.tag):
-                    print "Circular reference", name, self.tag
-                    return False
-                #else:
-                    #    self.db[name].slaves.update({self.tag : self})
-        
-        # minä self, en ole enää vanhojen isäntien orja
-        for name in self.names:
-            if self.db[name].slaves.has_key(self.tag):
-                self.db[name].slaves.pop(self.tag)
-       
-        # vaan uusien isäntien orja
-        self.names = tmp_names
-        for name in self.names:
-            self.db[name].slaves.update({self.tag: self})
- 
-        self.formula = formula
-        self.code = compile_command(self.tag + ".value = " + self.formula)
-        return True
-        
-    def new_formula(self, kaava):
-        "vaihtaa alkion kaavan"
-        if self.find_deps(kaava):
-            self.calc()
-        
-    def calc(self):
-        "laskee alkion arvon"
-        try:
-            self.db.ic.runcode(self.code)
-            for s in self.slaves:
-                self.slaves[s].calc()
-        except RuntimeError, detail:
-            print detail
-            for s in self.slaves:
-                print s,
-                self.slaves[s].calc()
-        except  Exception, detail:
-            print detail
+    def passive_color(self):
+        if self.selected:
+            self.canvas.itemconfig(self.tag, self.selected_fill)
+        else:
+            self.canvas.itemconfig(self.tag, self.passive_fill)
 
-    """matemaattiset operaattorit luokalle"""
+    def selected_color(self):
+        self.canvas.itemconfig(self.tag, self.selected_fill)
 
-    def __add__(self, other):
-        return self.value + other 
+    def new_fellow(self, fellow, other_end = None):
+        self.fellows.new_fellow(fellow, other_end)
+        fellow.new_fellow(self)
 
-    __radd__ = __add__
+    def delete(self):
+        self.canvas.delete(self.tag)
+        self.canvas.items.pop(self.tag)
+                
+    def addtag(self, tag):
+        self.canvas.addtag_withtag(tag, self.tag)
 
-    def __sub__(self, other):
-	return self.value - other
+    def canvasx(self, x):
+        return self.canvas.canvasx(x)          
 
-    def __rsub__(self, other):
-	return other - self.value
+    def canvasy(self, y):
+        return self.canvas.canvasy(y)          
 
-    def __mul__(self, other):
-	return self.value * other
-
-    __rmul__ = __mul__
-
-    def __div__(self, other):
-	return self.value / float(other)
-
-    def __rdiv__(self, other):
-	return float(other) / self.value
-
-    def __pow__(self, n, z=None):
-	return pow(self.value, n, z)
-
-    def __rpow__(self, base):
-	return pow(base, self.value)
-
-    def __neg__(self):
-	return -self.value
-
-    def __pos__(self):
-	return +self.value
-
-    def __abs__(self):
-	return abs(self.value)
-
-    def __int__(self):
-	return int(self.value)
-
-    def __long__(self):
-	return long(self.value)
-
-    def __float__(self):
-	return float(self.value)
-
-    def __nonzero__(self):
-	return not (self.value == 0)
-
-    def __xor__(self, other):
-        return pow(self.value, other)
-
-    # String operations
-    
-    def __str__(self):
-    	return str(self.value)
-
-    def __len__(self): 
-	return len(str(self.value))
-        
     def __getstate__(self):    
         odict = self.__dict__.copy() # copy the dict since we change it    
-        odict['code'] = None
+        odict['canvas'] = None
+
+        try:
+            odict['value'] = None
+            odict['e'] = None
+            odict['id_txt'] = None
+        except:
+            pass
+        
+        #for t in odict:
+        #    print t,"=",odict[t]
         return odict
 
+    
     def __setstate__(self, dicti):
-        if dicti:
-            self.__dict__.update(dicti)
-        self.code = compile_command(self.tag + ".value = " + self.formula)
+        tag = dicti['tag']
+        if Item.cnt.has_key(tag[0]):
+            Item.cnt[tag[0]] = max(Item.cnt[tag[0]], int(tag[1:]))
+        else:
+            Item.cnt[tag[0]] = int(tag[1:])
+        self.__dict__.update(dicti)   # update attributes
         
-        
-            
-        
-        
-        
+    
+    def print_status(self, event=None):
+        print self.tag
+
+        for kw in self.fellows:
+            print "\t\t",
+            print kw + "->",
+            for fell in self.fellows[kw].fellows:
+                print fell,
+            print
+
