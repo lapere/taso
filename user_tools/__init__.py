@@ -1,3 +1,3 @@
-#__all__ = ["animaatio", "tol", "tyyli"]
-__all__ = ["tol"]
+__all__ = ["animaatio", "tol", "tyyli"]
+
 

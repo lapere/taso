@@ -7,7 +7,7 @@ class CmdText(Text, InteractiveInterpreter):
 
     def __init__(self, root):
         from cad_canvas import cad_canvas
-        Text.__init__(self, root, font=("Fixed", "11", "bold"), height=5, bg = "white")
+        Text.__init__(self, root, font=("Fixed", "14", "bold"), height=5, bg = "white")
         InteractiveInterpreter.__init__(self)
         self.canvas = cad_canvas(root, bg="white", width=800, height=600,
                                  closeenough=5.0)
@@ -18,7 +18,7 @@ class CmdText(Text, InteractiveInterpreter):
         self.locals["canvas"] = self.canvas
         #self.ret = self.runsource("tol.canvas = canvas")
         self.cmd = ""
-        #sys.stdout = self
+        sys.stdout = self
         #print dir(sys.stdout)
         #sys.stdout.write = self.write 
         #sys.stderr = os.tmpfile()

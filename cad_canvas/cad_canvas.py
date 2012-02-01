@@ -1,6 +1,6 @@
 from Tkinter import *
 from time import sleep
-from default_tools.level import _X,_Y,_A,_C
+from default_tools.level import _X,_Y,_A
 from default_tools.point import Point
 from default_tools.line import Line
 from default_tools.text import Txt
@@ -299,19 +299,6 @@ class cad_canvas(ScrolledCanvas):
         tmp.repaint()
         return tmp
 
-    def circleElement(self, point=None, value=None):
-        if point == None:
-            point = self.point()
-        if value == None:
-            x1 = point.x
-            y1 = point.y
-            x2, y2 = self._get_point()
-            value = DistBetweenTwoPoint(x1, y1, x2, y2)
-            
-        tmp = _C(self, point, value)
-        tmp.repaint()
-        return tmp
-    
     def line(self, startp=None, endp=None):
         if startp == None:
             startp = self.point()
@@ -440,9 +427,8 @@ class cad_canvas(ScrolledCanvas):
         self.repaint()
         
     def print_status(self, event=None):
-        print "status"+"*"*(80-len("status"))
         for kw in self.items:
-            i = self.items[kw]
-            print kw,"=", i.value,"\"", i.formula, "\"",  
-            print "slaves:[",i.slaves.keys(), "] names:[", i.names.keys(), "]"
-            print 
+            print "\t",
+            print kw,
+            if self.items[kw]():
+                print self.items[kw]()    
