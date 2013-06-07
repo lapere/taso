@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#P.R 2005
+#P.R 2005, 2013
 
 from Tkinter import *
 from cad_canvas import *
