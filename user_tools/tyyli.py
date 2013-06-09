@@ -9,6 +9,7 @@ def viivan_paksuus():
     """viivan paksuus pikseleinä"""
     w = __askfloat("Muuta viivan leveys", "viivan leveys pikseleinä")
     current.line_style["width"] = int(w)
+    
 
 
 def viivan_color():
